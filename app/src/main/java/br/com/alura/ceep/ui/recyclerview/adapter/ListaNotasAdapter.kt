@@ -2,21 +2,15 @@ package br.com.alura.ceep.ui.recyclerview.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.databinding.BindingAdapter
-import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import br.com.alura.ceep.BR
-import br.com.alura.ceep.R
 import br.com.alura.ceep.databinding.ItemNotaBinding
 import br.com.alura.ceep.model.Nota
-import br.com.alura.ceep.ui.extensions.carregaImagem
-import kotlinx.android.synthetic.main.item_nota.view.*
 
 class ListaNotasAdapter(
     private val context: Context,
@@ -37,16 +31,17 @@ class ListaNotasAdapter(
     }
 
     inner class ViewHolder(private val viewDataBinding: ViewDataBinding) :
-        RecyclerView.ViewHolder(viewDataBinding.root) {
+        RecyclerView.ViewHolder(viewDataBinding.root), View.OnClickListener {
+        override fun onClick(view: View?) {
+            if (::nota.isInitialized) {
+                onItemClickListener(nota)
+            }
+        }
 
         private lateinit var nota: Nota
 
         init {
-            itemView.setOnClickListener {
-                if (::nota.isInitialized) {
-                    onItemClickListener(nota)
-                }
-            }
+            viewDataBinding.setVariable(BR.clicaNaNota, this)
         }
 
         fun vincula(nota: Nota) {
